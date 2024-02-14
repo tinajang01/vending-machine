@@ -6,11 +6,11 @@ int stock (int candy);
 int moneyPayment ();
 int activity ();
 int restock ();
-const float distance_kitkat = 1.5; //actual is 3
-const float distance_smarties = 1.2; //actual measurement 2.5
-const float distance_coffeecrisp = 1.5; //3
-const float CM_TO_ENC = 360/(2*PI*1);
 
+const float distance_kitkat = 1.5; // actual measurement of candy is 3
+const float distance_smarties = 1.2; // actual measurement: 2.5
+const float distance_coffeecrisp = 1.5; // actual measurement: 3
+const float CM_TO_ENC = 360/(2*PI*1);
 const float ENC_LIM_k = distance_kitkat* CM_TO_ENC;
 const float ENC_LIM_s = distance_smarties* CM_TO_ENC;
 const float ENC_LIM_c = distance_coffeecrisp* CM_TO_ENC;
@@ -32,55 +32,50 @@ task main()
   {
   	//start up
   	displayBigTextLine (5, "Welcome!");
-		wait1Msec (2000);
-		displayBigTextLine (5, "Select Candy:");
-		wait1Msec (4000);
-		int candy = 0;
+	wait1Msec (2000);
+	displayBigTextLine (5, "Select Candy:");
+	wait1Msec (4000);
+	int candy = 0;
 
-		//detect candy colour for 2s
-		time1[T3] = 0;
-		int clock = time1[T3];
-		while (clock < 2000)
-		{
-			candy = candyColour();
-			clock = time1[T3];
-		}
+	//detect candy colour for 2s
+	time1[T3] = 0;
+	int clock = time1[T3];
+	while (clock < 2000)
+	{
+		candy = candyColour();
+		clock = time1[T3];
+	}
 
-    // checks for money payment
-    if (candy == 0)
-    {
-    	active = 0;
-    }
+    	// checks for money payment
+    	if (candy == 0)
+        {
+    		active = 0;
+    	}
 
-    int paid = moneyPayment();
-    if (paid == 0)
-    {
-    	displayBigTextLine (5, "No Payment!");
-      displayBigTextLine (7, "Terminated."); // should go back to welcome screen
-      wait1Msec (3000);
-      eraseDisplay ();
-    }
-    // if money is paid, machine pushes out candy
-    else
-    {
-    	if (candy == 1)
-      {
-      	pushCandy (candy, a);
-      }
-     	else if (candy == 2)
-      {
-      	pushCandy (candy, b);
-      }
-      else
+    	int paid = moneyPayment();
+    	if (paid == 0)
     	{
-      	pushCandy (candy, c);
-      }
-      wait1Msec(2000);
-      active = activity();
- 		}
+    		displayBigTextLine (5, "No Payment!");
+      		displayBigTextLine (7, "Terminated."); // returns to welcome screen
+      		wait1Msec (3000);
+      		eraseDisplay ();
+    	}
+		
+    	// if money is paid, machine pushes out candy
+    	else
+    	{
+    		if (candy == 1)
+      			pushCandy (candy, a);
+     		else if (candy == 2)
+      			pushCandy (candy, b);
+      	      	else
+      			pushCandy (candy, c);
+      		wait1Msec(2000);
+      		active = activity();
+ 	}
  		active = activity ();
  		active = restock();
-	}//while loop closing brace
+   }//while loop closing brace
 }//task main closing brace
 
 void configureAllSensors()
@@ -96,10 +91,10 @@ void configureAllSensors()
 	nMotorEncoder[motorA]=nMotorEncoder[motorB]=nMotorEncoder[motorC]= 0;
 }
 
-int candyColour () // works
+int candyColour ()
 {
 	// 5 is red, 2 is blue, 4 is yellow
-	while (!getButtonPress (buttonAny)&& !SensorValue[S3] > 1) // test it
+	while (!getButtonPress (buttonAny)&& !SensorValue[S3] > 1)
 	{}
 	eraseDisplay ();
 	int candy = 0;
@@ -107,22 +102,22 @@ int candyColour () // works
 	{
 		candy = 1;
 		displayBigTextLine(5, "KitKat");
-    wait1Msec (3000);
-    eraseDisplay ();
+    		wait1Msec (3000);
+    		eraseDisplay ();
 	}
 	else if (SensorValue[S3] == 2 || getButtonPress(buttonUp))
 	{
 		candy = 2;
 		displayBigTextLine(5, "Smarties");
-    wait1Msec (3000);
-    eraseDisplay ();
+    		wait1Msec (3000);
+    		eraseDisplay ();
 	}
 	else if (SensorValue[S3] == 4 || getButtonPress(buttonLeft))
 	{
 		candy = 3;
 		displayBigTextLine(5, "Coffee Crisp");
-    wait1Msec (3000);
-    eraseDisplay ();
+    		wait1Msec (3000);
+    		eraseDisplay ();
 	}
 	else
 	{
@@ -146,9 +141,9 @@ int stock (int candy)
     if (candy == 3)
     {
         stock_of_candy = 5 - round((nMotorEncoder[motorC])/(ENC_LIM_c/2));
-  	}
-		wait1Msec(2000);
-		eraseDisplay();
+    }
+    wait1Msec(2000);
+    eraseDisplay();
     return stock_of_candy;
 }
 
@@ -158,7 +153,7 @@ int restock ()
 	{
         displayBigTextLine (5, "Initiating restock!");
         displayBigTextLine (7, "Enter password:");
-    		while (!getButtonPress(buttonUp))
+    	while (!getButtonPress(buttonUp))
         {}
         while (!getButtonPress(buttonRight))
         {}
@@ -209,7 +204,7 @@ void pushCandy (int candy, float ENC_LIM)
 		else
 		{
 			while(nMotorEncoder[motorA] < initialEncoder + ENC_LIM/2)
-				{}
+			{}
 			motor [motorA] = 0;
 		}
 	}
@@ -227,7 +222,7 @@ void pushCandy (int candy, float ENC_LIM)
 		else
 		{
 			while(nMotorEncoder[motorB] < initialEncoder + ENC_LIM/2)
-				{}
+			{}
 			motor [motorB] = 0;
 		}
 	}
